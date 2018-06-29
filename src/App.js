@@ -16,7 +16,7 @@ class App extends Component {
 				{
 					number: 2,
 					name: 'Two'
-				},	{
+				}, {
 					number: 3,
 					name: 'Three'
 				},
@@ -28,22 +28,48 @@ class App extends Component {
 		return (
 			<section>
 				<h3>TODO list</h3>
-				<ListInput />
-				<Toggle />
-				<ItemsList items={this.state.todoItems} />
+				<ListInput onListInputSubmit={e => this.getNewItem(e)}/>
+				<Toggle/>
+				<ItemsList items={this.state.todoItems}/>
 			</section>
 		);
+	}
+
+	getNewItem(e) {
+		let item = {
+			name: e
+		};
+		this.setState({
+			todoItems: [...this.state.todoItems,  item]
+		});
 	}
 }
 
 class ListInput extends Component {
+	constructor() {
+		super();
+
+		this.state = {
+			value: ''
+		};
+	}
+
 	render() {
 		return (
-			<form action="">
-				<input type="text"/>
+			<form onSubmit={e => this.handleSubmit(e)}>
+				<input onChange={e => this.handleChange(e)} type="text" value={this.state.value}/>
 				<button>Add</button>
 			</form>
 		)
+	}
+
+	handleChange(event) {
+		this.setState({value: event.target.value});
+	}
+
+	handleSubmit(event) {
+		event.preventDefault();
+		this.props.onListInputSubmit(this.state.value);
 	}
 }
 
@@ -56,7 +82,6 @@ class Toggle extends Component {
 				<input type="checkbox"/>
 				<span>Number</span>
 			</div>
-
 		)
 	}
 }
