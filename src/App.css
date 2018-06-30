@@ -5,6 +5,10 @@ body {
   height: 100vh;
 }
 
+li {
+  list-style-type: none;
+}
+
 .App {
   text-align: center;
 }
