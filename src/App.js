@@ -9,7 +9,8 @@ class App extends Component {
 
 		this.state = {
 			todoItems: [],
-			sortedBy: 'number'
+			sortedBy: 'number',
+			number: 0
 		}
 	}
 
@@ -17,9 +18,12 @@ class App extends Component {
 		return (
 			<section>
 				<h3>TODO list</h3>
-				<ListInput onListInputSubmit = {e => this.getNewItem(e)}/>
-				<Toggle onSortingChange = {e => this.changeSorting(e)}/>
-				<ItemsList items={this.state.todoItems} sortedType = {this.state.sortedBy}/>
+				<ListInput onListInputSubmit={e => this.getNewItem(e)}/>
+				<Toggle onSortingChange={e => this.changeSorting(e)}/>
+				<ItemsList items={this.state.todoItems}
+						   sortedType={this.state.sortedBy}
+						   onRemoveItem={e => this.removeItem(e)}
+				/>
 			</section>
 		);
 	}
@@ -35,8 +39,14 @@ class App extends Component {
 	}
 
 	changeSorting(e) {
-		let sortedType = e.target.checked ? 'number' : 'name';
+		let sortedType = e.target.checked ? 'name' : 'number';
 		this.setState({sortedBy: sortedType});
+	}
+
+	removeItem(number) {
+		let actualItems = this.state.todoItems.filter(item => item.number !== number);
+		actualItems.forEach((item, i) => item.number = i + 1);
+		this.setState({todoItems: actualItems});
 	}
 }
 
@@ -95,25 +105,20 @@ class ItemsList extends Component {
 						if (this.props.sortedType === 'number') {
 							return item1.number - item2.number;
 						} else if (this.props.sortedType === 'name') {
-							this.props.items.sort((item1, item2) => {
-								if (item1.name < item2.name) return -1;
-								if (item1.name > item2.name) return 1;
-								return 0;
-							})
+								return item2.name.localeCompare(item1.name);
 						}
-					}).map((item, index) => (
+					}).map((item, index) =>
 						<li key={index}>{item.number} {item.name}
-							<button onClick={() => this.clickHandler(index)}>Remove</button>
+							<button onClick={() => this.clickHandler(item.number)}>Remove</button>
 						</li>
-					))
+					)
 				}
 			</ol>
 		)
-
-
 	}
-	clickHandler(index) {
-		console.log(index);
+
+	clickHandler(number) {
+		this.props.onRemoveItem(number);
 	}
 }
 
