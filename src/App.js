@@ -22,6 +22,7 @@ class App extends Component {
 				<ItemsList items={this.state.todoItems}
 						   sortedType={this.state.sortedBy}
 						   onRemoveItem={e => this.removeItem(e)}
+						   onDoneItem={e => this.doneItem(e)}
 				/>
 			</section>
 		);
@@ -31,7 +32,8 @@ class App extends Component {
 		if (e) {
 			let item = {
 				name: e,
-				number: this.state.todoItems.length + 1
+				number: this.state.todoItems.length + 1,
+				done: false
 			};
 			this.setState({
 				todoItems: [item, ...this.state.todoItems]
@@ -40,7 +42,6 @@ class App extends Component {
 	}
 
 	changeSorting(e) {
-		console.log(e.target.checked);
 		let sortedType = e.target.checked ? 'name' : 'number';
 		this.setState({sortedBy: sortedType});
 	}
@@ -49,6 +50,14 @@ class App extends Component {
 		let actualItems = this.state.todoItems.filter(item => item.number !== number);
 		// actualItems.forEach((item, i) => item.number = i + 1);
 		this.setState({todoItems: actualItems});
+	}
+
+	doneItem(number) {
+		this.setState(prevState => {
+			let newData = prevState.todoItems.slice();
+			newData[number - 1].done = !newData[number - 1].done;
+			return {todoItems: newData}
+		})
 	}
 }
 
@@ -119,16 +128,19 @@ class ItemsList extends Component {
 							return item1.name.localeCompare(item2.name);
 						}
 					}).map((item, index) =>
-						<li className='list__item list-group-item'
+						<li className={item.done ? 'list__item--done list__item list-group-item' : 'list__item list-group-item'}
 							key={index}>{item.number}. {item.name}
-							<button className="list__done-btn btn">
+
+							<button onClick={() => this.doneHandler(item.number)}
+									className="list__done-btn btn">
 								<span className="glyphicon glyphicon-ok"></span>
 							</button>
+
 							<button
-								onClick={() => this.clickHandler(item.number)}
+								onClick={() => this.removeHandler(item.number)}
 								className="list__close-btn btn"
 							>
-								<span aria-hidden="true">&times;</span>
+								<span>&times;</span>
 							</button>
 						</li>
 					)
@@ -137,8 +149,12 @@ class ItemsList extends Component {
 		)
 	}
 
-	clickHandler(number) {
+	removeHandler(number) {
 		this.props.onRemoveItem(number);
+	}
+
+	doneHandler(number) {
+		this.props.onDoneItem(number);
 	}
 }
 
