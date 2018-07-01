@@ -1,40 +1,129 @@
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+#root {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 50%;
 }
 
 li {
-  list-style-type: none;
+	list-style-type: none;
 }
 
-.App {
-  text-align: center;
+.form-group {
+	display: flex;
+	width: 100%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 50px;
+	height: 20px;
+	margin: 0 5px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.switch input {
+	display: none;
 }
 
-.App-title {
-  font-size: 1.5em;
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #bdde97;
+	-webkit-transition: .4s;
+	transition: .4s;
 }
 
-.App-intro {
-  font-size: large;
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 15px;
+	width: 15px;
+	left: 5px;
+	bottom: 3px;
+	background-color: white;
+	-webkit-transition: .4s;
+	transition: .4s;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+input:focus + .slider {
+	box-shadow: 0 0 1px #2196F3;
 }
 
+input:checked + .slider:before {
+	-webkit-transform: translateX(26px);
+	-ms-transform: translateX(26px);
+	transform: translateX(26px);
+}
+
+.slider.round {
+	border-radius: 34px;
+}
+
+.slider.round:before {
+	border-radius: 50%;
+}
+
+.toggle {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.toggle__head {
+	padding: 0 15px 0 0;
+	margin: 0;
+	font-weight: bold;
+}
+
+.toggle__label {
+	color: gray;
+	font-size: 12px;
+}
+
+.list {
+	width: 100%;
+	margin: 20px 0 0 0;
+
+}
+
+.list__item {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.form-group__btn {
+	width: 10%;
+	min-width: 50px;
+}
+
+.list__close-btn {
+	background: transparent;
+	margin: 0 0 0 0;
+	font-weight: bold;
+}
+
+.list__done-btn {
+	background: transparent;
+	margin: 0 0 0 auto;
+}
